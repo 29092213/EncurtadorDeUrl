@@ -1,0 +1,26 @@
+# --- STAGE 1: Build the Java application ---
+FROM maven:3.9.5-amazoncorretto-17 AS builder
+WORKDIR /app
+
+# Copy the pom.xml file first to download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy the rest of the source code
+COPY src ./src
+
+# Package the application into a JAR file
+# This assumes your final JAR file is generated inside the 'target/' directory
+RUN mvn clean install -DskipTests
+
+# --- STAGE 2: Create the final image ---
+# Use a lightweight base image for the final deployment
+FROM amazoncorretto:17-alpine-jdk
+WORKDIR /app
+
+# Copy the JAR file from the builder stage
+# Replace 'encurtador-url-0.0.1-SNAPSHOT.jar' with the actual name of your generated JAR
+COPY --from=builder /app/target/*.jar app.jar
+
+# Define the entry point for the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
