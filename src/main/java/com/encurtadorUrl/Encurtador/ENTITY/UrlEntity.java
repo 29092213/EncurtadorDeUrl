@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class UrlEntity {
 
     @Id
-    private long id;
+    private String id;
 
     private String fullUrl;
     private String reduceUrl;
@@ -18,18 +18,18 @@ public class UrlEntity {
     @Indexed(expireAfterSeconds = 120)
     private LocalDateTime expireAt;
 
-    public UrlEntity(long id, String fullUrl, String reduceUrl, LocalDateTime expireAt) {
+    public UrlEntity(String id, String fullUrl, String reduceUrl, LocalDateTime expireAt) {
         this.id = id;
         this.fullUrl = fullUrl;
         this.reduceUrl = reduceUrl;
         this.expireAt = expireAt;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
